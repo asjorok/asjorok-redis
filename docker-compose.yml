@@ -3,6 +3,8 @@ version: '2'
 services:
   redis:
     image: 'bitnami/redis:5.0'
+    container_name: 'redis'
+    hostname: 'redis'
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
@@ -11,7 +13,15 @@ services:
       - '6379:6379'
     volumes:
       - 'redis_data:/bitnami/redis/data'
-
+  commander:
+    image: 'rediscommander/redis-commander'
+    environment:
+      - PORT=6380
+      - REDIS_HOST=redis
+    ports:
+      - '6380:6380'
+    depends_on:
+      - redis
 volumes:
   redis_data:
     driver: local
